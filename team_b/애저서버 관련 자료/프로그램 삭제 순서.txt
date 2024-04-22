@@ -1,0 +1,5 @@
+sudo apt-get remove apache*
+sudo apt-get --purge remove apache*
+sudo apt-get autoremove
+
+dpkg -l | grep apache

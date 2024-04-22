@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style>
+        /*배경화면 효과 CSS*/
+        body {
+            background: linear-gradient(-30deg,#800000, #000000, #565656);
+            background-size: 400% 700%;
+            animation: gradient 5s ease infinite;
+            height: 400vh;
+            font-weight: 100;
+        }
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* 헤드라인 효과 */
+        @import url(https://fonts.googleapis.com/css?family=Montserrat);
+        @keyframes stroke-offset{
+            100% {stroke-dashoffset: -35%;}
+        }
+        html, body{
+            height: 100%;
+            font-weight: 800;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container_headline {
+            display: flex;
+            font-size: 16px;
+            text-align: auto;
+            top: 0%;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+        }
+
+        svg {
+            display: block;
+            font: 8em 'Montserrat';
+            width: 100%;
+            height: 300px;
+            margin: 0;
+        }
+
+        .text-copy {
+            fill: none;
+            stroke: white;
+            stroke-dasharray: 6% 29%;
+            stroke-width: 5px;
+            stroke-dashoffset: 0%;
+            animation: stroke-offset 5.5s infinite linear;
+        }
+
+        .text-copy:nth-child(1){
+            stroke: #4D163D;
+            animation-delay: -1;
+        }
+
+        .text-copy:nth-child(2){
+            stroke: #840037;
+            animation-delay: -2s;
+        }
+
+        .text-copy:nth-child(3){
+            stroke: #BD0034;
+            animation-delay: -3s;
+        }
+
+        .text-copy:nth-child(4){
+            stroke: #BD0034;
+            animation-delay: -4s;
+        }
+
+        .text-copy:nth-child(5){
+            stroke: #FDB731;
+            animation-delay: -5s;
+        }
+
+        /* 비디오 박스 효과 */
+        .container_video_box {
+            position: relative;
+            top: 0%;
+            left: 0%;
+            transform: translate(-50%, -50%);
+            width: 640px;
+            height: 480px;
+            text-align: center;
+            z-index: 1;
+        }
+        .container_video_box::after {
+            width: 0%;
+            height: 0%;
+            content: "";
+            position: relative;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            opacity: 0.1;
+            text-align: center;
+            z-index: 1;
+        }
+        .img{
+            border-style: hidden;
+            border-radius: 1px;
+        }
+
+        /* 그래프 박스 효과 */
+        .container_psition {
+            position: relative;
+            top: 0%;
+            left: 0%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+        }
+
+        /* 그래프 박스 효과 */
+        .container_box {
+            position: relative;
+            top: 0%;
+            left: 0%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+            }
+        .container_box::after {
+            position: relative;
+            top: 0%;
+            left: 0%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+        }
+
+        /* 서브타이틀 효과 */
+        h1 {
+            text-shadow: 2px 2px 2px rgba(103, 103, 103, 0.717);
+            color: rgb(207, 207, 207);
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+        }
+    </style>
+    <title>실시간 화재 감지</title>
+</head>
+<body>
+    <head class="container_headline">
+        <svg viewBox="0 0 1440 300">
+            <symbol id="s-text">
+            <text text-anchor="middle" x="50%" y="50%">Fire Detection CCTV</text>
+            </symbol>
+
+            <g class = "g-ants">
+            <use xlink:href="#s-text" class="text-copy"></use>
+            <use xlink:href="#s-text" class="text-copy"></use>
+            <use xlink:href="#s-text" class="text-copy"></use>
+            <use xlink:href="#s-text" class="text-copy"></use>
+            <use xlink:href="#s-text" class="text-copy"></use>
+            </g>
+        </svg>
+    </head>
+    <videobox class="container_video_box">
+        <h1>실시간 영상</h1>
+        <div style="margin: 10px; padding: 10px;">
+            <img src="{{ url_for('video_feed') }}" width="700" height="500" frameborder="0" style="margin-bottom: 100px;"></img>
+        </div>
+    </videobox>
+    <psition class="container_psition">
+        <h1>실시간 탐지 데이터</h1>
+        <div style="margin-bottom: 100px; padding: 10px;">
+            <iframe src="http://20.194.30.39:3000/d-solo/l2uY4yQ7z/mysql?orgId=1&from=now-5m&to=now&refresh=5s&theme=dark&panelId=6" width="250" height="200" frameborder="0" style="margin-right: 70px;"></iframe>
+            <iframe src="http://20.194.30.39:3000/d-solo/l2uY4yQ7z/mysql?orgId=1&from=now-5m&to=now&refresh=5s&theme=dark&panelId=8" width="250" height="200" frameborder="0" style="margin-right: 70px;"></iframe>
+            <iframe src="http://20.194.30.39:3000/d-solo/l2uY4yQ7z/mysql?orgId=1&from=now-5m&to=now&refresh=5s&theme=dark&panelId=10" width="250" height="200" frameborder="0"></iframe>
+        </div>
+    </psition>
+    <box class="container_box">
+        <h1>일간 탐지 데이터</h1>
+        <div style="margin: 10px; padding: 10px;"><!--일간 화재 감지 횟수-->
+            <iframe src="http://20.194.30.39:3000/d-solo/l2uY4yQ7z/mysql?orgId=1&from=now-5m&to=now&refresh=5s&theme=dark&panelId=2" width="900" height="500" frameborder="0"></iframe>
+        </div>
+        <div style="margin: 10px; padding: 10px;"><!--일간 온습도 측정-->
+            <iframe src="http://20.194.30.39:3000/d-solo/l2uY4yQ7z/mysql?orgId=1&from=now-5m&to=now&refresh=5s&theme=dark&panelId=4" width="900" height="500" frameborder="0"></iframe>
+        </div>
+    </box>
+</body>
+</html>

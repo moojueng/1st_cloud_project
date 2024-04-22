@@ -1,0 +1,3 @@
+https://kauth.kakao.com/oauth/authorize?client_id=4b2e711c8d24870d3c840e51272b82ab&redirect_uri=https://localhost.com&response_type=code&scope=talk_message,friends
+
+4b2e711c8d24870d3c840e51272b82ab

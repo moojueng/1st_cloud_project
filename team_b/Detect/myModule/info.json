@@ -1,0 +1,14 @@
+{
+"server_host": "20.200.184.152", 
+"server_port" : 43309,
+"user" : "jj",
+"passwd" : "1234",
+"db" : "projectB",
+"charset" : "utf8", 
+"person_num" : ["010-3997-8450", "010-8008-2021", "010-8598-8951", "010-9780-5386", "-"],  
+"model_PATH" : "model/xception/best.hdf5", 
+"mjpg_PATH" : "http://192.168.0.16:9090/?action=stream", 
+"socket_ip" : "192.168.0.23",
+"socket_port" : 59010,
+"frame_path" : "frame.jpg"
+}

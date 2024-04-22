@@ -1,0 +1,7 @@
+apm 통합 설치: https://kadosholy.tistory.com/7
+phpmyadmin 설치: https://wnw1005.tistory.com/535
+phpmyadmin을 위한 mysql 암호 방식 변경 방법: https://jootc.com/p/201904182721
+
+grafana 설치 방법: https://computingforgeeks.com/how-to-install-grafana-on-ubuntu-linux-2/
+
+전부 외부접속 허용되게 해줘야됨, vm 포트 열어줘야됨(프로그램당 해당하는 포트), ufw 사용하지 않기

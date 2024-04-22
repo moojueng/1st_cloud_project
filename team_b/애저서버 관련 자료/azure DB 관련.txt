@@ -1,0 +1,113 @@
+	시간 동기화
+
+    확인 작업
+ls -l /etc/localtime
+/etc/localtime -> /usr/share/zoneinfo/Etc/UTC
+cat /etc/timezone (현재시간 확인)
+timedatectl list-timezones | grep Asia/Seoul => 있으면 진행 없으면 몰?루?
+
+    지역 변경하기
+udo timedatectl set-timezone Asia/Seoul
+timedatectl => 현재 시간과 맞는지 확인
+
+
+	azure mysql 환경설정
+
+    1. mysql 계정 만들기, grant해서 권한부여
+sudo mysql -u root -p
+use mysql;
+create user "계정이름"@'%' identified by '비밀번호';
+grant all privileges on 혀용할DB명.허용할Table명 to 계정이름@'%';
+FLUSH PRIVILEGES;
+ 
+    2. 외부 접속 허용, mysql 서비스 포트 변경해주기(ex: 43309)
+sudo vi /etc/mysql/mysql.conf.d
+#port 되어 있는것 port = 43309로 수정(앞에 #지우기)
+bind_address = 127.0.0.1앞에 #붙여서 주석처리
+
+    3. azura 네트워크 포트 열어주기(ex: 43309)
+
+연결될거임
+
+	phpmyadmin연동하기
+    1./etc/apache2/apache2.conf 파일에 
+    2.Include /etc/phpmyadmin/apache.conf
+cd 
+	person_info 테이블 생성 데이터 기입
+
+CREATE TABLE `person_info` (
+	`phone_num` VARCHAR(20) NOT NULL COLLATE 'utf8_general_ci',
+	`person_name` VARCHAR(10) NOT NULL COLLATE 'utf8_general_ci',
+	`addr` VARCHAR(20) NOT NULL COLLATE 'utf8_general_ci',
+	`sex` VARCHAR(5) NOT NULL COLLATE 'utf8_general_ci',
+	PRIMARY KEY (`phone_num`) USING BTREE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
+insert into person_info values ('010-3997-8450', '최규범', '경기도 부천시', 'man'), ('010-8008-2021', '안형수', '충청남도 천안시', 'man'), ('010-8598-8951', '조하나', '전라북도 전주시', 'woman'),
+ ('010-9780-5386', '심은용', '경기도 안산시', 'man');
+
+
+	electronic_list 테이블 생성
+
+CREATE TABLE `electronic_list` (
+	`No` INT(10) NOT NULL AUTO_INCREMENT,
+	`Date` DATE NOT NULL,
+	`Time` TIME NOT NULL,
+	`phone_num` VARCHAR(20) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	`person_name` VARCHAR(10) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	`addr` VARCHAR(20) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	`sex` VARCHAR(5) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	`temperature` FLOAT UNSIGNED NOT NULL,
+	`state` VARCHAR(10) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	PRIMARY KEY (`No`) USING BTREE
+)
+COLLATE='utf8mb4_0900_ai_ci'
+ENGINE=InnoDB
+;
+
+
+	기입 명령어 틀(MYSQL에서)
+insert into electronic_list (date, time, phone_num, name, addr, sex, temperature, state) select now(), now(), phone_num, name, addr, sex, 36.5, 'in' from person_info where phone_num='010-3997-8450';
+
+	1. 이벤트 스케줄러를 이용한 일정기간 이후 데이터 삭제
+
+1_1. 이벤트 실행할 명령어 생성
+
+DELIMITER $$ #끝나는 특수문자 지정함
+CREATE PROCEDURE autoDel()
+BEGIN
+DELETE FROM electronic_list WHERE date < DATE_FORMAT(DATE_ADD(NOW(), INTERVAL -14 DAY), '%Y-%m-%d');
+END $$
+DELIMITER ;
+
+1_2. 이벤트 스케줄러 생성 및 활성화
+CREATE EVENT autoDelEvent ON SCHEDULE EVERY '0 0:0:14' DAY_SECOND STARTS NOW() DO CALL autoDel();
+SET GLOBAL event_scheduler = ON;
+
+1_3. 이벤트 유무 및 상세 정보 확인
+show procedure status; [프로시저 보기]
+SELECT * FROM information_schema.events; [이벤트 확인]
+
+1_4. 잘못입력 삭제
+drop procedure autoDel; [프로시저 삭제하는 명령]
+drop event autoDelEvent;
+
+
+	2. 이벤트를 통한 No. 번호 다시 매기기
+
+2_1. 기본키 번호 처음부터 매기기
+
+DELIMITER $$ #끝나는 특수문자 지정함
+CREATE PROCEDURE sortNum()
+BEGIN
+alter table `electronic_list` auto_INCREMENT = 1;
+set @CNT = 0;
+update `electronic_list` set No = @CNT:=@CNT+1;
+END $$ 
+DELIMITER ;
+
+2_2. 이벤트 스케줄러 생성 및 활성화
+CREATE EVENT sortNumEvent ON SCHEDULE EVERY 1 SECOND STARTS NOW() DO CALL sortNum();
