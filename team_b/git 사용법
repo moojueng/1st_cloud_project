@@ -21,3 +21,11 @@ git remote remove 지울거 : git 연결 정보 삭제
 11. git rm asdf.py
 12. git commit -m Delete
 13. git push origin GUGU
+
+----------------------------------------------------------------
+
+branch master를 main으로 바꾸는 방법
+
+git branch -m master main
+git fetch origin
+git branch -u origin/main main
